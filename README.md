@@ -60,14 +60,16 @@ site/                  GitHub Pages 发布内容
   styles.css           响应式布局
   core.js              校验与 Notion 调用
   app.js               页面交互
+dist/                  发布构建输出（自动添加资源版本，避免旧脚本缓存）
 tests/                 Node 测试与本地浏览器模拟
 scripts/dev.mjs        本地预览服务器
+scripts/build.mjs      无依赖静态构建
 .github/workflows/     测试与 GitHub Pages 自动发布
 ```
 
 ## 发布
 
-仓库设置中将 Pages 的 Source 设为 **GitHub Actions**。推送到 `main` 后，工作流先运行测试，再发布 `site/`。该站点使用 GitHub Pages 静态托管，无需设置仓库密钥。
+仓库设置中将 Pages 的 Source 设为 **GitHub Actions**。推送到 `main` 后，工作流先运行测试，再通过 `npm run build` 生成并发布 `dist/`。构建只处理 `site/`，给脚本、样式及其模块依赖添加内容版本，避免更新后加载旧脚本。该站点使用 GitHub Pages 静态托管，无需设置仓库密钥。
 
 ## 常见问题
 

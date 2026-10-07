@@ -6,6 +6,7 @@
   "description": "在浏览器中将 ProcessOn 在线图表插入 Notion 原生嵌入区块。",
   "scripts": {
     "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
     "test": "node --test tests/*.test.mjs"
   },
   "engines": { "node": ">=22" },
