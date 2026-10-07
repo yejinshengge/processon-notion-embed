@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN" data-embed-tool="true">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="粘贴 ProcessOn 嵌入链接和 Notion 页面链接，一键插入原生在线图表。浏览器直连 Notion，凭证不持久保存。">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src https://api.notion.com; frame-src https://www.processon.com https://processon.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>图桥 · ProcessOn 嵌入 Notion</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#embed-form">跳至嵌入表单</a>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="图桥首页"><img src="./favicon.svg" width="38" height="38" alt=""><span>图桥<small>PROCESS<span class="brand-dot">ON</span> → NOTION</small></span></a>
+      <nav aria-label="主导航"><a href="#setup-guide">首次设置</a><a href="https://github.com/yejinshengge/processon-notion-embed" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></nav>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <div class="eyebrow"><span></span>让图表和知识保持连接</div>
+          <h1 id="page-title">把图表，<br class="mobile-break">放进笔记<span>。</span></h1>
+          <p>粘贴两个链接，把 ProcessOn 的在线图表<br class="desktop-break">嵌入 Notion。保留画布，保留缩放，保留更新。</p>
+        </div>
+        <div class="bridge-art" aria-hidden="true">
+          <div class="art-node art-source"><span class="art-label">PROCESS<span>ON</span></span><i class="branch branch-one"></i><i class="branch branch-two"></i><b class="mini-node node-one"></b><b class="mini-node node-two"></b><b class="mini-node node-three"></b></div>
+          <div class="art-arrow">→</div>
+          <div class="art-node art-target"><span class="art-label">NOTION</span><i class="note-line line-one"></i><i class="note-line line-two"></i><b class="embedded-node"></b><i class="note-line line-three"></i></div>
+          <span class="art-caption">一张图，两处连接</span>
+        </div>
+      </section>
+
+      <div id="js-notice" class="notice">正在加载工具。若此提示一直存在，请启用 JavaScript 后刷新页面。</div>
+
+      <form id="embed-form" class="workspace" novalidate>
+        <section class="panel main-panel" aria-labelledby="links-title">
+          <div class="panel-heading"><div><span class="step-number">01</span><h2 id="links-title">链接与位置</h2></div><span class="quiet-tag">在线图表</span></div>
+          <div class="field">
+            <label for="processon-url">ProcessOn 嵌入链接</label>
+            <div class="input-with-icon"><span class="field-icon processon-icon" aria-hidden="true">P</span><input id="processon-url" name="processon-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.processon.com/embed/…" aria-describedby="processon-hint processon-url-error"></div>
+            <p class="field-hint" id="processon-hint">从「分享 → 嵌入第三方」复制，也支持粘贴 iframe 代码。</p>
+            <p id="processon-url-error" class="field-error"></p>
+          </div>
+          <div class="field">
+            <label for="notion-url">Notion 目标页面</label>
+            <div class="input-with-icon"><span class="field-icon notion-icon" aria-hidden="true">N</span><input id="notion-url" name="notion-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://app.notion.com/p/…" aria-describedby="notion-hint notion-url-error"></div>
+            <p class="field-hint" id="notion-hint">粘贴页面链接或页面 ID，并将该页面授权给你的 Notion 连接。</p>
+            <p id="notion-url-error" class="field-error"></p>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="block-title">图表标题 <span class="optional">可选</span></label><input id="block-title" name="block-title" type="text" maxlength="80" placeholder="例如：阅读思维导图" aria-describedby="block-title-error"><p id="block-title-error" class="field-error"></p></div>
+            <div class="field"><label for="position">插入位置</label><select id="position" name="position"><option value="end">页面底部</option><option value="start">页面顶部</option></select></div>
+          </div>
+          <div class="actions"><button id="submit-button" class="button primary" type="submit"><span id="submit-label">嵌入到 Notion</span><span class="submit-arrow" aria-hidden="true">↗</span></button><button id="preview-button" class="button secondary" type="button">先预览图表</button></div>
+          <p class="action-hint">嵌入前会检查页面顶层是否已有相同图表，避免重复添加。</p>
+          <p id="progress-text" class="progress-text" role="status" hidden></p>
+          <section id="result" class="result" role="status" aria-live="polite" aria-atomic="true" hidden><div class="result-mark" aria-hidden="true"></div><div><h3 id="result-title"></h3><p id="result-message"></p><a id="result-link" target="_blank" rel="noopener noreferrer" hidden>打开 Notion 页面 <span aria-hidden="true">↗</span></a></div></section>
+        </section>
+
+        <aside class="panel connection-panel" aria-labelledby="connection-title">
+          <div class="panel-heading"><div><span class="step-number">02</span><h2 id="connection-title">连接 Notion</h2></div></div>
+          <div id="connection-state" class="connection-state" data-state="idle"><span class="status-dot"></span><span id="connection-label">等待连接</span></div>
+          <p id="page-name" class="page-name" hidden></p>
+          <div class="field token-field"><label for="notion-token">你的 Notion 连接凭证</label><div class="password-wrap"><input id="notion-token" name="notion-token" type="password" autocomplete="off" spellcheck="false" autocapitalize="none" placeholder="粘贴连接设置中的 API token" aria-describedby="token-hint notion-token-error"><button id="show-token" type="button" aria-pressed="false" aria-label="显示或隐藏 Notion 凭证">显示</button></div><p id="notion-token-error" class="field-error"></p><p class="field-hint" id="token-hint">凭证仅用于浏览器直连 Notion。刷新或关闭页面后需要重新填写。</p></div>
+          <div class="token-actions"><button id="check-button" class="button outline" type="button">检查页面连接</button><button id="clear-token" class="text-button" type="button">清除凭证</button></div>
+          <details id="setup-guide" class="setup-guide" open>
+            <summary>第一次使用？按这三步设置 <span aria-hidden="true">＋</span></summary>
+            <ol class="setup-steps">
+              <li><span>1</span><div><strong>创建内部连接</strong><p>在 Notion 创建自己的内部连接，开启「读取内容」与「插入内容」。</p><a href="https://www.notion.com/help/create-integrations-with-the-notion-api" target="_blank" rel="noopener noreferrer">打开官方设置指引 ↗</a></div></li>
+              <li><span>2</span><div><strong>授权目标页面</strong><p>在目标页面右上角「••• → 连接 / 添加连接」中选择刚创建的连接。</p></div></li>
+              <li><span>3</span><div><strong>复制凭证并填写</strong><p>在连接的配置页复制 API token，填写上方凭证，便可检查并嵌入。</p></div></li>
+            </ol>
+          </details>
+          <div class="privacy-note"><svg aria-hidden="true" width="17" height="19" viewBox="0 0 17 19" fill="none"><path d="M8.5 1.5 15 4v5c0 4-3.4 7-6.5 8.5C5.4 16 2 13 2 9V4l6.5-2.5Z" stroke="currentColor" stroke-width="1.5"/><path d="m5.5 9 2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><p>个人工具 · 无持久化存储<br><span>建议使用只授权所需页面的内部连接。</span></p></div>
+        </aside>
+      </form>
+
+      <section id="preview-panel" class="preview-panel panel" hidden aria-labelledby="preview-title"><div class="preview-heading"><h2 id="preview-title">ProcessOn 在线预览</h2><div><a id="preview-original" target="_blank" rel="noopener noreferrer">打开原图 ↗</a><button id="close-preview" class="text-button" type="button">关闭预览</button></div></div><iframe id="preview-frame" title="ProcessOn 在线图表预览" referrerpolicy="no-referrer" allowfullscreen></iframe><p class="field-hint">如果预览要求访问权限，请在 ProcessOn 开启公开分享与「嵌入第三方」。</p></section>
+
+      <section class="how-it-works" aria-label="工作方式"><div><span class="feature-number">A</span><strong>原生嵌入</strong><p>直接创建 Notion 嵌入区块，保留在线画布。</p></div><div><span class="feature-number">B</span><strong>图表保持更新</strong><p>读取 ProcessOn 在线内容，无需反复导出图片。</p></div><div><span class="feature-number">C</span><strong>网页直接使用</strong><p>无需安装。填写你的凭证与两个链接即可。</p></div></section>
+
+      <section class="faq" aria-label="常见问题"><details><summary>为什么普通嵌入会变成链接卡片？</summary><p>Notion 界面的链接嵌入会先经过第三方解析。本工具通过 Notion API 直接创建 embed 区块，避免被解析为预览卡片。图表仍需要 ProcessOn 开启公开分享和第三方嵌入。</p></details><details><summary>图表修改后会立即更新吗？</summary><p>嵌入显示的是 ProcessOn 的在线页面，更新时机取决于 ProcessOn。如果保存修改后 Notion 仍显示旧内容，重新打开或刷新 Notion 页面即可尝试加载最新内容。</p></details><details><summary>凭证会保存在哪里？</summary><p>凭证仅保留在当前页面的内存和输入框中，只随请求发送给 api.notion.com。工具不使用 localStorage、Cookie、分析统计或第三方脚本。网页代码能接触你输入的凭证，因此建议使用只授权必要页面的内部连接，并在用完后清除凭证。</p></details></section>
+    </main>
+    <footer><span>图桥 <span class="footer-dot">·</span> 让图表回到知识里</span><a href="https://github.com/yejinshengge/processon-notion-embed" target="_blank" rel="noopener noreferrer">开源于 GitHub ↗</a><span class="footer-version">v1.0</span></footer>
+  </div>
+</body>
+</html>
