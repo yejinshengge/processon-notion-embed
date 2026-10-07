@@ -139,6 +139,7 @@ export function mountApp(root = document, { fetchImpl = globalThis.fetch } = {})
   });
 
   clear.addEventListener('click', () => {
+    clearErrors();
     byId('notion-token').value = '';
     byId('notion-token').type = 'password';
     show.textContent = '显示';
