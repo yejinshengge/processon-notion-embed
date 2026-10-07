@@ -103,7 +103,8 @@ function responseError(status, write) {
 export class NotionClient {
   constructor(token, { fetchImpl = globalThis.fetch, timeoutMs = 20000, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)) } = {}) {
     this.token = normalizeToken(token);
-    this.fetchImpl = fetchImpl;
+    // Native browser fetch must keep the Window receiver when injected.
+    this.fetchImpl = (...args) => fetchImpl.call(globalThis, ...args);
     this.timeoutMs = timeoutMs;
     this.sleep = sleep;
   }

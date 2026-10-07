@@ -202,3 +202,13 @@ test('固定请求路径拒绝代理、非 Notion 路径和自定义来源', asy
   }
   assert.equal(NOTION_API, 'https://api.notion.com/v1');
 });
+
+test('注入的原生 fetch 保留浏览器全局接收者，避免 Illegal invocation', async () => {
+  const client = new NotionClient(TOKEN, {
+    fetchImpl: async function () {
+      assert.equal(this, globalThis);
+      return json(page);
+    }
+  });
+  assert.equal((await client.page(PAGE)).id, PAGE);
+});
